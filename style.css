@@ -23,17 +23,29 @@
 /* ==========================================
    THE BREATHING VOID BASE CANVAS
    ========================================== */
+/* NEW: Bulletproof base layer so iOS never flashes white again */
+html {
+    background-color: #030305; 
+}
+
+/* ==========================================
+   THE BREATHING VOID BASE CANVAS
+   ========================================== */
 body {
-    background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
+    /* FIX 1: Explicit fallback color */
+    background-color: #050110; 
+    
+    /* FIX 2: Split into 'background-image' instead of shorthand */
+    background-image: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-size: 400% 400%;
-    background-attachment: fixed;
+    
+    /* DELETED: background-attachment: fixed; (This is the specific code breaking iOS!) */
+    
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
-
-    /* UPDATED: Slowed down to 60 seconds to match the new, longer path */
     animation: breathing-void 60s ease-in-out infinite;
 }
 
