@@ -1,0 +1,454 @@
+/* ==========================================
+   WISTERIA THEME VARIABLES
+   ========================================== */
+:root {
+    --bg-dark: #030305;
+    --wisteria-main: #9333ea;
+    --wisteria-glow: #d946ef;
+    --text-main: #ffffff;
+    --text-muted: #cbd5e1;
+    --glass-bg: rgba(20, 15, 30, 0.4);
+    --glass-border: rgba(147, 51, 234, 0.3);
+    --radius: 12px;
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   THE BREATHING VOID BASE CANVAS
+   ========================================== */
+body {
+    background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
+    background-size: 400% 400%;
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+
+    /* UPDATED: Slowed down to 60 seconds to match the new, longer path */
+    animation: breathing-void 60s ease-in-out infinite;
+}
+
+@keyframes breathing-void {
+    0% {
+        background-position: 0% 25%;
+    }
+
+    20% {
+        background-position: 100% 80%;
+    }
+
+    40% {
+        background-position: 50% 100%;
+    }
+
+    60% {
+        background-position: 10% 50%;
+    }
+
+    80% {
+        background-position: 80% 10%;
+    }
+
+    100% {
+        background-position: 0% 25%;
+    }
+}
+
+/* ==========================================
+   INTERACTIVE GLOWING ORBS (GPU ACCELERATED & PARALLAX)
+   ========================================== */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 130vw;
+    height: 130vw;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
+    /* Parallax drag: barely follows the mouse */
+    transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
+    z-index: -2;
+    pointer-events: none;
+    animation: void-hue-shift 60s infinite alternate ease-in-out;
+    transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
+    will-change: transform, filter;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vw;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
+    /* Parallax drag: extreme depth */
+    transform: translate(calc((50% - var(--mouse-x)) * 0.5), calc((50% - var(--mouse-y)) * 0.1));
+    z-index: -2;
+    pointer-events: none;
+    animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
+    transition: transform 8s cubic-bezier(0.1, 1, 0.1, 1);
+    will-change: transform, filter;
+}
+
+@keyframes void-hue-shift {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* ==========================================
+   SMOOTH SPA VIEW LOGIC
+   ========================================== */
+.view {
+    display: none;
+    opacity: 0;
+    padding-top: 100px;
+    min-height: 100vh;
+}
+
+.view.active-view {
+    display: block;
+    animation: smoothFade 0.6s ease forwards;
+}
+
+@keyframes smoothFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   HOME SECTION: EDITORIAL POSTER LAYOUT
+   ========================================== */
+.poster-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto 1fr auto;
+    align-items: start;
+
+    /* FIX: Changed from 100vh to 100dvh to prevent mobile browser bar clipping */
+    min-height: 100dvh;
+
+    width: 100%;
+    padding: 140px 40px 40px 40px;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.corner-text {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-family: 'Space Grotesk', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.4;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.top-left {
+    grid-column: 1;
+    grid-row: 1;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.top-center {
+    grid-column: 2;
+    grid-row: 1;
+    align-items: center;
+    text-align: center;
+}
+
+.top-right {
+    grid-column: 3;
+    grid-row: 1;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.bottom-center {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    align-items: center;
+    text-align: center;
+    margin-top: auto;
+    align-self: end;
+}
+
+.line-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.line {
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background-color: var(--text-muted);
+}
+
+.cross {
+    font-size: 16px;
+    color: var(--wisteria-glow);
+    line-height: 1;
+    margin-top: 5px;
+}
+
+.disclaimer-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    opacity: 0.6;
+}
+
+.line-long {
+    display: inline-block;
+    width: 150px;
+    height: 1px;
+    background-color: var(--text-muted);
+}
+
+.diamond {
+    font-size: 10px;
+}
+
+.signature-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-main);
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+/* ==========================================
+   THE CYBERSIGILISM CENTERPIECE
+   ========================================== */
+.center-graphic {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    z-index: 20;
+}
+
+.liquid-type-fallback {
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 900;
+    font-size: clamp(4rem, 10vw, 9rem);
+    letter-spacing: -2px;
+    color: #ffffff;
+    text-align: center;
+    transform: scaleY(1.4);
+    margin: 0;
+    padding: 20px 0;
+    text-shadow: 0 0 10px #fff, 0 0 25px rgba(255, 0, 50, 0.8), 0 0 50px rgba(255, 0, 50, 0.4), 0 0 80px #000;
+
+    /* Matches the smooth background shift */
+    animation: void-hue-shift 60s infinite alternate ease-in-out;
+    will-change: filter;
+}
+
+.spline-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+@media (max-width: 768px) {
+    .poster-layout {
+        padding: 100px 20px 20px 20px;
+    }
+
+    .corner-text {
+        font-size: 9px;
+    }
+
+    .top-left,
+    .top-right {
+        display: none;
+    }
+
+    .line-long {
+        width: 30px;
+    }
+}
+
+/* ==========================================
+   ABOUT ME & GUITAR LAB SECTIONS
+   ========================================== */
+.content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 20px 40px 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.content-wrapper h2 {
+    font-size: 2.5rem;
+    color: var(--wisteria-glow);
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+}
+
+.content-wrapper p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 700px;
+}
+
+.polaroid-gallery {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    margin-top: 50px;
+}
+
+.polaroid {
+    position: absolute;
+    width: 220px;
+    background: #ffffff;
+    padding: 12px 12px 50px 12px;
+    border-radius: 8px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    cursor: grab;
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+}
+
+.polaroid:active {
+    cursor: grabbing;
+    box-shadow: 0 25px 50px rgba(147, 51, 234, 0.4);
+}
+
+.polaroid img {
+    width: 100%;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.polaroid-caption {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #111;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.track-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 20px 30px;
+    border-radius: var(--radius);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.track-item:hover {
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
+    transform: translateX(10px);
+    border-color: var(--wisteria-glow);
+}
+
+.track-name {
+    font-family: monospace;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.play-track-btn {
+    background: rgba(147, 51, 234, 0.1);
+    color: var(--wisteria-glow);
+    border: 1px solid var(--wisteria-main);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-family: monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.play-track-btn:hover {
+    background: var(--wisteria-main);
+    color: #fff;
+    box-shadow: 0 0 15px var(--wisteria-glow);
+}
+
+@media (max-width: 768px) {
+    .poster-layout {
+        padding: 80px 20px 20px 20px;
+    }
+
+    /* Reduced top padding for mobile */
+    .corner-text {
+        font-size: 9px;
+    }
+
+    .top-left,
+    .top-right {
+        display: none;
+    }
+
+    .line-long {
+        width: 30px;
+    }
+
+    /* NEW: Ensures the massive liquid font shrinks enough to fit on narrow screens */
+    .liquid-type-fallback {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+    }
+}
