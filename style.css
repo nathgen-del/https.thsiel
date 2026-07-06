@@ -20,26 +20,20 @@
     box-sizing: border-box;
 }
 
-/* ==========================================
-   THE BREATHING VOID BASE CANVAS
-   ========================================== */
-/* NEW: Bulletproof base layer so iOS never flashes white again */
+/* NEW: Bulletproof base layers for iOS Safari */
 html {
-    background-color: #030305; 
+    background-color: #030305 !important;
+    color-scheme: dark;
 }
 
 /* ==========================================
    THE BREATHING VOID BASE CANVAS
    ========================================== */
 body {
-    /* FIX 1: Explicit fallback color */
-    background-color: #050110; 
-    
-    /* FIX 2: Split into 'background-image' instead of shorthand */
+    background-color: #030305 !important;
+    background-image: -webkit-linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-image: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-size: 400% 400%;
-    
-    /* DELETED: background-attachment: fixed; (This is the specific code breaking iOS!) */
     
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
@@ -50,31 +44,62 @@ body {
 }
 
 @keyframes breathing-void {
-    0% {
-        background-position: 0% 25%;
-    }
-
-    20% {
-        background-position: 100% 80%;
-    }
-
-    40% {
-        background-position: 50% 100%;
-    }
-
-    60% {
-        background-position: 10% 50%;
-    }
-
-    80% {
-        background-position: 80% 10%;
-    }
-
-    100% {
-        background-position: 0% 25%;
-    }
+    0% { background-position: 0% 25%; }
+    20% { background-position: 100% 80%; }
+    40% { background-position: 50% 100%; }
+    60% { background-position: 10% 50%; }
+    80% { background-position: 80% 10%; }
+    100% { background-position: 0% 25%; }
 }
 
+/* ==========================================
+   INTERACTIVE GLOWING ORBS (iOS OPTIMIZED)
+   ========================================== */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 130vw;
+    height: 130vw;
+    background: -webkit-radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
+    transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
+    z-index: -2;
+    pointer-events: none;
+    -webkit-animation: void-hue-shift 60s infinite alternate ease-in-out;
+    animation: void-hue-shift 60s infinite alternate ease-in-out;
+    transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
+    
+    /* REMOVED: will-change: transform, filter; (This crashes Safari) */
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vw;
+    background: -webkit-radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
+    transform: translate(calc((50% - var(--mouse-x)) * 0.5), calc((50% - var(--mouse-y)) * 0.1));
+    z-index: -2;
+    pointer-events: none;
+    -webkit-animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
+    animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
+    transition: transform 8s cubic-bezier(0.1, 1, 0.1, 1);
+}
+
+@-webkit-keyframes void-hue-shift {
+    0% { -webkit-filter: hue-rotate(0deg); }
+    100% { -webkit-filter: hue-rotate(360deg); }
+}
+
+@keyframes void-hue-shift {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
 /* ==========================================
    INTERACTIVE GLOWING ORBS (GPU ACCELERATED & PARALLAX)
    ========================================== */
