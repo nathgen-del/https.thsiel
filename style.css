@@ -23,12 +23,10 @@
 /* ==========================================
    THE BASE CANVAS (SAFARI & MOBILE SAFE)
    ========================================== */
-/* 1. Bulletproof bottom layer so it never flashes white */
 html {
     background-color: #030305 !important;
 }
 
-/* 2. Body must be transparent so the gradient below it shows through! */
 body {
     background-color: transparent !important; 
     color: var(--text-main);
@@ -38,23 +36,17 @@ body {
     min-height: 100vh;
 }
 
-/* 3. The dedicated background gradient layer */
 .safari-void-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    height: 100dvh; /* Adapts to mobile URL bar */
-    
+    height: 100dvh; 
     background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-size: 400% 400%;
-    
-    /* Sits underneath the orbs and the text */
     z-index: -3; 
     pointer-events: none;
-    
-    /* The smooth breathing animation */
     animation: breathing-void 60s ease-in-out infinite;
 }
 
@@ -79,7 +71,7 @@ body::before {
     height: 130vw;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
     transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
-    z-index: -2; /* Sits right above the void background */
+    z-index: -2; 
     pointer-events: none;
     animation: void-hue-shift 60s infinite alternate ease-in-out;
     transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
@@ -390,15 +382,12 @@ body::after {
 }
 
 /* ==========================================
-   MOBILE RESPONSIVENESS & CLEANUP (THE GRID UPGRADE)
-   ========================================== */
-/* ==========================================
-   MOBILE RESPONSIVENESS (THE NUCLEAR FIX)
+   MOBILE RESPONSIVENESS (THE FLAWLESS GRID)
    ========================================== */
 @media (max-width: 768px) {
     .view.poster-layout {
         display: grid !important; 
-        grid-template-columns: 1fr 1fr; /* Split top row perfectly in half */
+        grid-template-columns: 1fr 1fr; 
         grid-template-rows: auto auto 1fr auto; 
         padding: 40px 20px 30px 20px;
         min-height: 100dvh;
@@ -409,9 +398,9 @@ body::after {
         position: static !important; 
     }
     
-    /* 1. LEFT TEXT - NUCLEAR FIX */
     .top-left {
-        display: flex !important; /* Forces it to show up no matter what */
+        display: flex !important;
+        flex-direction: column !important;
         grid-column: 1;
         grid-row: 1;
         align-items: flex-start;
@@ -421,9 +410,9 @@ body::after {
         letter-spacing: 1px;
     }
     
-    /* 2. RIGHT TEXT - NUCLEAR FIX */
     .top-right {
-        display: flex !important; /* Forces it to show up no matter what */
+        display: flex !important;
+        flex-direction: column !important;
         grid-column: 2;
         grid-row: 1;
         align-items: flex-end;
@@ -433,7 +422,6 @@ body::after {
         letter-spacing: 1px;
     }
 
-    /* 3. ROW 2: REALM OF VOID */
     .top-center {
         grid-column: 1 / -1;
         grid-row: 2;
@@ -442,7 +430,6 @@ body::after {
         margin-top: 15px; 
     }
 
-    /* 4. ROW 3: THE CENTER GRAPHIC */
     .center-graphic {
         grid-column: 1 / -1;
         grid-row: 3;
@@ -457,7 +444,6 @@ body::after {
         padding: 0;
     }
 
-    /* 5. ROW 4: THE BOTTOM DISCLAIMER */
     .bottom-center {
         grid-column: 1 / -1;
         grid-row: 4;
@@ -480,7 +466,6 @@ body::after {
         width: 100%;
     }
 
-    /* The stretching rubber-band lines */
     .line-long {
         display: block; 
         flex: 1; 
@@ -489,14 +474,12 @@ body::after {
         width: auto;
     }
 
-    /* The glowing diamonds */
     .diamond {
         display: block;
         font-size: 7px;
         color: var(--wisteria-glow); 
     }
 
-    /* Beautifully wrapped text */
     .disclaimer-line p {
         font-size: 7px;
         line-height: 1.6;
@@ -504,29 +487,5 @@ body::after {
         text-align: center;
         margin: 0;
         white-space: normal;
-    }
-}
-
-    /* The magic trick: lines stretch automatically to fill empty space */
-    .line-long {
-        display: block; 
-        flex: 1; 
-        height: 1px;
-        background-color: var(--glass-border);
-        width: auto;
-    }
-
-    .diamond {
-        display: block;
-        font-size: 7px;
-        color: var(--wisteria-glow); /* Added a glowing pop of color */
-    }
-
-    .disclaimer-line p {
-        font-size: 7.5px;
-        line-height: 1.5;
-        max-width: 55%; /* Keeps the text wrapping beautifully in the center */
-        text-align: center;
-        margin: 0;
     }
 }
