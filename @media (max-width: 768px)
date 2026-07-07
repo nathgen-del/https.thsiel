@@ -20,13 +20,17 @@
     box-sizing: border-box;
 }
 
-/* 1. Bulletproof black base layers so it never flashes white */
+/* ==========================================
+   THE BASE CANVAS (SAFARI & MOBILE SAFE)
+   ========================================== */
+/* 1. Bulletproof bottom layer so it never flashes white */
 html {
     background-color: #030305 !important;
 }
 
+/* 2. Body must be transparent so the gradient below it shows through! */
 body {
-    background-color: transparent !important; /* FIX: Makes body clear so the gradient shows through! */
+    background-color: transparent !important; 
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: hidden;
@@ -34,20 +38,23 @@ body {
     min-height: 100vh;
 }
 
-/* 2. The dedicated background layer that Safari can actually handle */
+/* 3. The dedicated background gradient layer */
 .safari-void-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    height: 100dvh; 
+    height: 100dvh; /* Adapts to mobile URL bar */
+    
     background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-size: 400% 400%;
     
-    /* FIX: Changed z-index from -3 to -1 so it sits OVER the html, but UNDER your text */
-    z-index: -1; 
+    /* Sits underneath the orbs and the text */
+    z-index: -3; 
     pointer-events: none;
+    
+    /* The smooth breathing animation */
     animation: breathing-void 60s ease-in-out infinite;
 }
 
@@ -61,7 +68,7 @@ body {
 }
 
 /* ==========================================
-   INTERACTIVE GLOWING ORBS (PARALLAX + iOS SAFE)
+   INTERACTIVE GLOWING ORBS (PARALLAX)
    ========================================== */
 body::before {
     content: '';
@@ -72,11 +79,10 @@ body::before {
     height: 130vw;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
     transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
-    z-index: -2;
+    z-index: -2; /* Sits right above the void background */
     pointer-events: none;
     animation: void-hue-shift 60s infinite alternate ease-in-out;
     transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
-    /* Removed 'will-change' to prevent Safari crashes */
 }
 
 body::after {
@@ -92,7 +98,6 @@ body::after {
     pointer-events: none;
     animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
     transition: transform 8s cubic-bezier(0.1, 1, 0.1, 1);
-    /* Removed 'will-change' to prevent Safari crashes */
 }
 
 @keyframes void-hue-shift {
@@ -129,7 +134,7 @@ body::after {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto 1fr auto;
     align-items: start;
-    min-height: 100dvh; /* Adapts to mobile browser bars */
+    min-height: 100dvh;
     width: 100%;
     padding: 140px 40px 40px 40px;
     box-sizing: border-box;
@@ -384,25 +389,30 @@ body::after {
     box-shadow: 0 0 15px var(--wisteria-glow);
 }
 
+/* ==========================================
+   MOBILE RESPONSIVENESS & CLEANUP
+   ========================================== */
 @media (max-width: 768px) {
     .poster-layout { padding: 80px 20px 20px 20px; }
     .corner-text { font-size: 9px; }
     .top-left, .top-right { display: none; }
     .liquid-type-fallback { font-size: clamp(2.5rem, 8vw, 4rem); }
     
-    /* NEW: Fixes the squished disclaimer layout on mobile */
+    /* FIX: Prevents the bottom text from getting squished and messy */
     .disclaimer-line {
         flex-direction: column;
+        margin-top: 15px;
     }
     
     .disclaimer-line p {
-        font-size: 8px; /* Shrinks the text for a cleaner look */
+        font-size: 8px;
         line-height: 1.6;
         max-width: 95%;
         margin: 0 auto;
+        text-align: center;
     }
     
-    /* Hides the long lines and diamonds on mobile to give the text room to breathe */
+    /* Hides the horizontal lines on mobile so the text has room to breathe */
     .line-long, .diamond { 
         display: none; 
     }
