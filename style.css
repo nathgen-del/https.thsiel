@@ -390,54 +390,25 @@ body::after {
 }
 
 /* ==========================================
-   MOBILE RESPONSIVENESS & CLEANUP
-   ========================================== */
-@media (max-width: 768px) {
-    .poster-layout { padding: 80px 20px 20px 20px; }
-    .corner-text { font-size: 9px; }
-    .top-left, .top-right { display: none; }
-    .liquid-type-fallback { font-size: clamp(2.5rem, 8vw, 4rem); }
-    
-    /* FIX: Prevents the bottom text from getting squished and messy */
-    .disclaimer-line {
-        flex-direction: column;
-        margin-top: 15px;
-    }
-    
-    .disclaimer-line p {
-        font-size: 8px;
-        line-height: 1.6;
-        max-width: 95%;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    /* Hides the horizontal lines on mobile so the text has room to breathe */
-    .line-long, .diamond { 
-        display: none; 
-    }
-}
-
-/* ==========================================
-   MOBILE RESPONSIVENESS & CLEANUP (THE UPGRADE)
-   ========================================== */
-/* ==========================================
    MOBILE RESPONSIVENESS & CLEANUP (THE GRID UPGRADE)
    ========================================== */
 @media (max-width: 768px) {
-    /* FIX: Force CSS Grid to override the .active-view block bug */
+    /* Force CSS Grid to override the .active-view block bug */
     .view.poster-layout {
         display: grid !important; 
-        grid-template-columns: 1fr 1fr; /* Split top row for left/right HUD */
-        grid-template-rows: auto auto 1fr auto; /* 4 strict rows */
+        grid-template-columns: 1fr 1fr; /* Split top row perfectly in half */
+        grid-template-rows: auto auto 1fr auto; 
         padding: 40px 20px 30px 20px;
         min-height: 100dvh;
-        gap: 15px; /* Natural spacing so nothing ever overlaps */
+        gap: 15px; 
     }
 
     /* 1. ROW 1: THE HUD CORNERS */
     .corner-text {
-        position: static; /* Removes the glitchy absolute positioning */
+        position: static !important; 
+        
+        /* THE FIX: This forces BOTH the left and right text to appear! */
+        display: flex !important; 
     }
     
     .top-left {
@@ -445,7 +416,7 @@ body::after {
         grid-row: 1;
         align-items: flex-start;
         text-align: left;
-        font-size: 7px; /* Editorial sizing */
+        font-size: 7px; 
         opacity: 0.8;
         letter-spacing: 1px;
     }
@@ -458,7 +429,6 @@ body::after {
         font-size: 7px;
         opacity: 0.8;
         letter-spacing: 1px;
-        display: flex; /* Ensures it shows up */
     }
 
     /* 2. ROW 2: REALM OF VOID */
@@ -467,7 +437,7 @@ body::after {
         grid-row: 2;
         align-items: center;
         text-align: center;
-        margin-top: 15px; /* Extra breathing room from the top texts */
+        margin-top: 15px; 
     }
 
     /* 3. ROW 3: THE CENTER GRAPHIC */
