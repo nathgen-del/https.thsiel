@@ -417,3 +417,91 @@ body::after {
         display: none; 
     }
 }
+
+/* ==========================================
+   MOBILE RESPONSIVENESS & CLEANUP (THE UPGRADE)
+   ========================================== */
+@media (max-width: 768px) {
+    .poster-layout {
+        padding: 0; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 1. RESTORE THE CYBER HUD CORNERS */
+    .top-left, .top-right {
+        display: flex;
+        position: absolute;
+        top: 25px;
+        font-size: 6px; /* Tiny, editorial Y2K sizing */
+        opacity: 0.8;
+        letter-spacing: 1px;
+    }
+    .top-left { 
+        left: 20px; 
+        align-items: flex-start; 
+        text-align: left; 
+    }
+    .top-right { 
+        right: 20px; 
+        align-items: flex-end; 
+        text-align: right; 
+    }
+
+    /* 2. LOCK THE "REALM OF VOID" TO TOP CENTER */
+    .top-center {
+        position: absolute;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+    }
+
+    /* 3. MAKE THE CENTER GRAPHIC MASSIVE */
+    .liquid-type-fallback {
+        font-size: clamp(3rem, 13vw, 5rem);
+    }
+
+    /* 4. RESTORE THE BEAUTIFUL DISCLAIMER LINES & DIAMONDS */
+    .bottom-center {
+        position: absolute;
+        bottom: 30px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .disclaimer-line {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    /* The magic trick: lines stretch automatically to fill empty space */
+    .line-long {
+        display: block; 
+        flex: 1; 
+        height: 1px;
+        background-color: var(--glass-border);
+        width: auto;
+    }
+
+    .diamond {
+        display: block;
+        font-size: 7px;
+        color: var(--wisteria-glow); /* Added a glowing pop of color */
+    }
+
+    .disclaimer-line p {
+        font-size: 7.5px;
+        line-height: 1.5;
+        max-width: 55%; /* Keeps the text wrapping beautifully in the center */
+        text-align: center;
+        margin: 0;
+    }
+}
