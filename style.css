@@ -392,8 +392,10 @@ body::after {
 /* ==========================================
    MOBILE RESPONSIVENESS & CLEANUP (THE GRID UPGRADE)
    ========================================== */
+/* ==========================================
+   MOBILE RESPONSIVENESS (THE NUCLEAR FIX)
+   ========================================== */
 @media (max-width: 768px) {
-    /* Force CSS Grid to override the .active-view block bug */
     .view.poster-layout {
         display: grid !important; 
         grid-template-columns: 1fr 1fr; /* Split top row perfectly in half */
@@ -403,15 +405,13 @@ body::after {
         gap: 15px; 
     }
 
-    /* 1. ROW 1: THE HUD CORNERS */
     .corner-text {
         position: static !important; 
-        
-        /* THE FIX: This forces BOTH the left and right text to appear! */
-        display: flex !important; 
     }
     
+    /* 1. LEFT TEXT - NUCLEAR FIX */
     .top-left {
+        display: flex !important; /* Forces it to show up no matter what */
         grid-column: 1;
         grid-row: 1;
         align-items: flex-start;
@@ -421,7 +421,9 @@ body::after {
         letter-spacing: 1px;
     }
     
+    /* 2. RIGHT TEXT - NUCLEAR FIX */
     .top-right {
+        display: flex !important; /* Forces it to show up no matter what */
         grid-column: 2;
         grid-row: 1;
         align-items: flex-end;
@@ -431,7 +433,7 @@ body::after {
         letter-spacing: 1px;
     }
 
-    /* 2. ROW 2: REALM OF VOID */
+    /* 3. ROW 2: REALM OF VOID */
     .top-center {
         grid-column: 1 / -1;
         grid-row: 2;
@@ -440,7 +442,7 @@ body::after {
         margin-top: 15px; 
     }
 
-    /* 3. ROW 3: THE CENTER GRAPHIC */
+    /* 4. ROW 3: THE CENTER GRAPHIC */
     .center-graphic {
         grid-column: 1 / -1;
         grid-row: 3;
@@ -455,7 +457,7 @@ body::after {
         padding: 0;
     }
 
-    /* 4. ROW 4: THE BOTTOM DISCLAIMER */
+    /* 5. ROW 4: THE BOTTOM DISCLAIMER */
     .bottom-center {
         grid-column: 1 / -1;
         grid-row: 4;
