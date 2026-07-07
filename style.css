@@ -20,26 +20,36 @@
     box-sizing: border-box;
 }
 
-/* NEW: Bulletproof base layers for iOS Safari */
-html {
-    background-color: #030305 !important;
-    color-scheme: dark;
-}
-
 /* ==========================================
-   THE BREATHING VOID BASE CANVAS
+   THE BREATHING VOID BASE CANVAS (SAFARI SAFE)
    ========================================== */
-body {
+/* 1. Bulletproof black base layers so it never flashes white */
+html, body {
     background-color: #030305 !important;
-    background-image: -webkit-linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
-    background-image: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
-    background-size: 400% 400%;
-    
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+}
+
+/* 2. The dedicated background layer that Safari can actually handle */
+.safari-void-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* Adapts to mobile URL bar */
+    
+    background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
+    background-size: 400% 400%;
+    
+    /* Puts it at the absolute bottom, behind the moving orbs */
+    z-index: -3; 
+    pointer-events: none;
+    
+    /* The smooth breathing animation */
     animation: breathing-void 60s ease-in-out infinite;
 }
 
@@ -53,7 +63,7 @@ body {
 }
 
 /* ==========================================
-   INTERACTIVE GLOWING ORBS (iOS OPTIMIZED)
+   INTERACTIVE GLOWING ORBS (PARALLAX + iOS SAFE)
    ========================================== */
 body::before {
     content: '';
@@ -62,16 +72,13 @@ body::before {
     left: 0;
     width: 130vw;
     height: 130vw;
-    background: -webkit-radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
     background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
     transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
     z-index: -2;
     pointer-events: none;
-    -webkit-animation: void-hue-shift 60s infinite alternate ease-in-out;
     animation: void-hue-shift 60s infinite alternate ease-in-out;
     transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
-    
-    /* REMOVED: will-change: transform, filter; (This crashes Safari) */
+    /* Removed 'will-change' to prevent Safari crashes */
 }
 
 body::after {
@@ -81,70 +88,18 @@ body::after {
     right: 0;
     width: 100vw;
     height: 100vw;
-    background: -webkit-radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
     background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
     transform: translate(calc((50% - var(--mouse-x)) * 0.5), calc((50% - var(--mouse-y)) * 0.1));
     z-index: -2;
     pointer-events: none;
-    -webkit-animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
     animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
     transition: transform 8s cubic-bezier(0.1, 1, 0.1, 1);
-}
-
-@-webkit-keyframes void-hue-shift {
-    0% { -webkit-filter: hue-rotate(0deg); }
-    100% { -webkit-filter: hue-rotate(360deg); }
+    /* Removed 'will-change' to prevent Safari crashes */
 }
 
 @keyframes void-hue-shift {
     0% { filter: hue-rotate(0deg); }
     100% { filter: hue-rotate(360deg); }
-}
-/* ==========================================
-   INTERACTIVE GLOWING ORBS (GPU ACCELERATED & PARALLAX)
-   ========================================== */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 130vw;
-    height: 130vw;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 0, 50, 0.12) 25%, rgba(0, 0, 0, 0) 70%);
-    /* Parallax drag: barely follows the mouse */
-    transform: translate(calc((var(--mouse-x) - 50%) * 0.15), calc((var(--mouse-y) - 50%) * 0.2));
-    z-index: -2;
-    pointer-events: none;
-    animation: void-hue-shift 60s infinite alternate ease-in-out;
-    transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
-    will-change: transform, filter;
-}
-
-body::after {
-    content: '';
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 100vw;
-    height: 100vw;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 110, 255, 0.1) 30%, rgba(0, 0, 0, 0) 70%);
-    /* Parallax drag: extreme depth */
-    transform: translate(calc((50% - var(--mouse-x)) * 0.5), calc((50% - var(--mouse-y)) * 0.1));
-    z-index: -2;
-    pointer-events: none;
-    animation: void-hue-shift 80s infinite alternate-reverse ease-in-out;
-    transition: transform 8s cubic-bezier(0.1, 1, 0.1, 1);
-    will-change: transform, filter;
-}
-
-@keyframes void-hue-shift {
-    0% {
-        filter: hue-rotate(0deg);
-    }
-
-    100% {
-        filter: hue-rotate(360deg);
-    }
 }
 
 /* ==========================================
@@ -163,15 +118,8 @@ body::after {
 }
 
 @keyframes smoothFade {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================
@@ -183,10 +131,7 @@ body::after {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto 1fr auto;
     align-items: start;
-
-    /* FIX: Changed from 100vh to 100dvh to prevent mobile browser bar clipping */
-    min-height: 100dvh;
-
+    min-height: 100dvh; /* Adapts to mobile browser bars */
     width: 100%;
     padding: 140px 40px 40px 40px;
     box-sizing: border-box;
@@ -275,9 +220,7 @@ body::after {
     background-color: var(--text-muted);
 }
 
-.diamond {
-    font-size: 10px;
-}
+.diamond { font-size: 10px; }
 
 .signature-logo {
     font-family: 'Space Grotesk', sans-serif;
@@ -314,10 +257,7 @@ body::after {
     margin: 0;
     padding: 20px 0;
     text-shadow: 0 0 10px #fff, 0 0 25px rgba(255, 0, 50, 0.8), 0 0 50px rgba(255, 0, 50, 0.4), 0 0 80px #000;
-
-    /* Matches the smooth background shift */
     animation: void-hue-shift 60s infinite alternate ease-in-out;
-    will-change: filter;
 }
 
 .spline-container {
@@ -327,25 +267,6 @@ body::after {
     width: 100%;
     height: 100%;
     z-index: 0;
-}
-
-@media (max-width: 768px) {
-    .poster-layout {
-        padding: 100px 20px 20px 20px;
-    }
-
-    .corner-text {
-        font-size: 9px;
-    }
-
-    .top-left,
-    .top-right {
-        display: none;
-    }
-
-    .line-long {
-        width: 30px;
-    }
 }
 
 /* ==========================================
@@ -466,26 +387,9 @@ body::after {
 }
 
 @media (max-width: 768px) {
-    .poster-layout {
-        padding: 80px 20px 20px 20px;
-    }
-
-    /* Reduced top padding for mobile */
-    .corner-text {
-        font-size: 9px;
-    }
-
-    .top-left,
-    .top-right {
-        display: none;
-    }
-
-    .line-long {
-        width: 30px;
-    }
-
-    /* NEW: Ensures the massive liquid font shrinks enough to fit on narrow screens */
-    .liquid-type-fallback {
-        font-size: clamp(2.5rem, 8vw, 4rem);
-    }
+    .poster-layout { padding: 80px 20px 20px 20px; }
+    .corner-text { font-size: 9px; }
+    .top-left, .top-right { display: none; }
+    .line-long { width: 30px; }
+    .liquid-type-fallback { font-size: clamp(2.5rem, 8vw, 4rem); }
 }
