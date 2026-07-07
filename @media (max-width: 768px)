@@ -20,12 +20,13 @@
     box-sizing: border-box;
 }
 
-/* ==========================================
-   THE BREATHING VOID BASE CANVAS (SAFARI SAFE)
-   ========================================== */
 /* 1. Bulletproof black base layers so it never flashes white */
-html, body {
+html {
     background-color: #030305 !important;
+}
+
+body {
+    background-color: transparent !important; /* FIX: Makes body clear so the gradient shows through! */
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
     overflow-x: hidden;
@@ -40,16 +41,13 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    height: 100dvh; /* Adapts to mobile URL bar */
-    
+    height: 100dvh; 
     background: linear-gradient(-45deg, #050110, #17052e, #0a0216, #000000);
     background-size: 400% 400%;
     
-    /* Puts it at the absolute bottom, behind the moving orbs */
-    z-index: -3; 
+    /* FIX: Changed z-index from -3 to -1 so it sits OVER the html, but UNDER your text */
+    z-index: -1; 
     pointer-events: none;
-    
-    /* The smooth breathing animation */
     animation: breathing-void 60s ease-in-out infinite;
 }
 
@@ -390,6 +388,22 @@ body::after {
     .poster-layout { padding: 80px 20px 20px 20px; }
     .corner-text { font-size: 9px; }
     .top-left, .top-right { display: none; }
-    .line-long { width: 30px; }
     .liquid-type-fallback { font-size: clamp(2.5rem, 8vw, 4rem); }
+    
+    /* NEW: Fixes the squished disclaimer layout on mobile */
+    .disclaimer-line {
+        flex-direction: column;
+    }
+    
+    .disclaimer-line p {
+        font-size: 8px; /* Shrinks the text for a cleaner look */
+        line-height: 1.6;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+    
+    /* Hides the long lines and diamonds on mobile to give the text room to breathe */
+    .line-long, .diamond { 
+        display: none; 
+    }
 }
